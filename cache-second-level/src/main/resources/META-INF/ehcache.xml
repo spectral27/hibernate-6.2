@@ -1,0 +1,7 @@
+<ehcache>
+    <!--
+    Element will exist, without accessing to it, for 30 seconds.
+    Accessing the element, it will exist for 60 seconds.
+    -->
+    <cache name="spec.Processor" maxEntriesLocalHeap="10" timeToIdleSeconds="30" timeToLiveSeconds="60"/>
+</ehcache>
