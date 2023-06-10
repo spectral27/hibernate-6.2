@@ -7,12 +7,12 @@ import jakarta.persistence.Persistence;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class HibernateExecutor {
+public class JpaExecutor {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    public HibernateExecutor() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("mainpersistenceunit");
+    public JpaExecutor() {
+        entityManagerFactory = Persistence.createEntityManagerFactory("jakarta-persistence");
     }
 
     public void execute(Consumer<EntityManager> consumer) {

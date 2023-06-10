@@ -4,44 +4,41 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-import java.util.List;
-
 public class Main {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    {
-        entityManagerFactory = Persistence.createEntityManagerFactory("jakarta-persistence");
-    }
-
     public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jakarta-persistence");
+
         Processor processor = new Processor();
         processor.setModel("i7-1165G7");
-        processor.setCores(4);
-        processor.setThreads(8);
+        processor.setPrice("9.99");
 
-        Main main = new Main();
-        main.persist(processor);
-
-        List<Processor> processors = main.getResultList("select p from Processor p", Processor.class);
-        processors.forEach(System.out::println);
-    }
-
-    public void persist(Object object) {
-        EntityManager em = entityManagerFactory.createEntityManager();
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        em.persist(object);
+        em.persist(processor);
         em.getTransaction().commit();
         em.close();
-    }
 
-    public <T> List<T> getResultList(String query, Class<T> resultClass) {
-        EntityManager em = entityManagerFactory.createEntityManager();
+        em = emf.createEntityManager();
         em.getTransaction().begin();
-        List<T> resultList = em.createQuery(query, resultClass).getResultList();
+        Processor processorToUpdateReference = em.find(Processor.class, 1);
+        processorToUpdateReference.setPrice("19.99");
         em.getTransaction().commit();
         em.close();
-        return resultList;
+
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Processor savedProcessor = em.find(Processor.class, 1);
+        System.out.printf("%d %s %s\n", savedProcessor.getId(), savedProcessor.getModel(), savedProcessor.getPrice());
+        em.getTransaction().commit();
+        em.close();
+
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Processor processorToDeleteReference = em.find(Processor.class, 1);
+        em.remove(processorToDeleteReference);
+        em.getTransaction().commit();
+        em.close();
     }
 
 }
