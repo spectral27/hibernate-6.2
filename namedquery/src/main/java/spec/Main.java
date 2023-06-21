@@ -28,6 +28,36 @@ public class Main {
         }
         em.getTransaction().commit();
         em.close();
+
+        em = factory.createEntityManager();
+        em.getTransaction().begin();
+        RecordClass record = new RecordClass();
+        record.setRecord("r1");
+        em.persist(record);
+        SectorClass sector1 = new SectorClass();
+        sector1.setSector("s1");
+        record.addSector(sector1);
+        em.persist(sector1);
+        SectorClass sector2 = new SectorClass();
+        sector2.setSector("s2");
+        record.addSector(sector2);
+        em.persist(sector2);
+        em.getTransaction().commit();
+        em.close();
+
+        em = factory.createEntityManager();
+        em.getTransaction().begin();
+        TypedQuery<RecordClass> recordsQuery = em.createNamedQuery("select_records", RecordClass.class);
+        List<RecordClass> records = recordsQuery.getResultList();
+        em.getTransaction().commit();
+        em.close();
+
+        for (RecordClass r : records) {
+            System.out.println(r.getRecord());
+            for (SectorClass s : r.getSectors()) {
+                System.out.println(s.getSector());
+            }
+        }
     }
 
 }
