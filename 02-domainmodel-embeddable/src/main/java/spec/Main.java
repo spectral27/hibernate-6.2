@@ -22,8 +22,12 @@ public class Main {
         ProcessorRepository processorRepository = new ProcessorRepository();
         processorRepository.insert(processor);
 
+        processorRepository.update(1, 469.99);
+
         Processor savedProcessor = processorRepository.select(1);
         System.out.println(savedProcessor);
+
+        processorRepository.delete(1);
     }
 
     public static EntityManagerFactory get() {
